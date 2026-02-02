@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh Toán - Nhã Uyên Flower</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Quicksand', sans-serif; background: #FFFAFA; }</style>
+</head>
+<body class="bg-gray-50 py-10">
+
+    <div class="container mx-auto px-4 max-w-6xl">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Xác Nhận Đơn Hàng</h1>
+
+        <!-- SỬA LỖI Ở ĐÂY: Dùng th:action="@{/checkout}" thay vì action="/checkout" -->
+        <form th:action="@{/checkout}" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- CỘT 1: THÔNG TIN GIAO HÀNG -->
+            <div class="bg-white p-6 rounded-xl shadow-lg h-fit">
+                <h2 class="text-xl font-bold text-pink-600 mb-6 border-b pb-2">
+                    <i class="fas fa-map-marker-alt mr-2"></i>Thông tin giao hàng
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-600 mb-1 font-bold">Họ và tên người nhận</label>
+                        <input type="text" name="name" required placeholder="Ví dụ: Nguyễn Văn A"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-pink-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-600 mb-1 font-bold">Số điện thoại</label>
+                        <input type="tel" name="phone" required placeholder="Ví dụ: 0912345678"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-pink-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-600 mb-1 font-bold">Địa chỉ nhận hàng</label>
+                        <textarea name="address" required rows="2" placeholder="Số nhà, đường, phường/xã..."
+                                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-pink-500"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-600 mb-1 font-bold">Ghi chú (Lời nhắn)</label>
+                        <textarea name="note" rows="2" placeholder="Ví dụ: Giao giờ hành chính, viết thiệp chúc mừng..."
+                                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-pink-500"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CỘT 2: TÓM TẮT ĐƠN HÀNG -->
+            <div class="bg-white p-6 rounded-xl shadow-lg h-fit">
+                <h2 class="text-xl font-bold text-gray-800 mb-6 border-b pb-2">
+                    <i class="fas fa-shopping-bag mr-2"></i>Đơn hàng của bạn
+                </h2>
+
+                <div class="space-y-4 mb-6 max-h-60 overflow-y-auto">
+                    <!-- List món hàng -->
+                    <div th:each="item : ${items}" class="flex justify-between items-center text-sm border-b border-dashed pb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-pink-600" th:text="${item.quantity} + 'x'"></span>
+                            <span class="text-gray-700" th:text="${item.name}">Tên hoa</span>
+                        </div>
+                        <span class="font-bold text-gray-600" 
+                              th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center text-xl font-bold border-t pt-4 mb-6">
+                    <span>Tổng thanh toán:</span>
+                    <span class="text-pink-600" th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                </div>
+
+                <button type="submit" class="w-full bg-pink-600 text-white font-bold py-3 rounded-full hover:bg-pink-700 transition shadow-lg shadow-pink-200">
+                    ĐẶT HÀNG NGAY <i class="fas fa-check-circle ml-2"></i>
+                </button>
+                
+                <a href="/cart" class="block text-center mt-4 text-gray-500 hover:text-pink-600 text-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Quay lại giỏ hàng
+                </a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

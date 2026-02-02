@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>403 - Cấm Truy Cập</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>body { font-family: 'Quicksand', sans-serif; background-color: #fdf2f8; }</style>
+</head>
+<body class="h-screen flex flex-col items-center justify-center text-center px-4">
+
+    <div class="mb-6 relative">
+        <i class="fas fa-user-lock text-9xl text-pink-400"></i>
+        <div class="absolute -top-2 -right-2 bg-red-500 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">!</div>
+    </div>
+
+    <h1 class="text-5xl font-bold text-gray-800 mb-2">Dừng Lại!</h1>
+    <h2 class="text-xl font-bold text-pink-600 mb-6 uppercase tracking-wider">Khu Vực Hạn Chế (403 Forbidden)</h2>
+    
+    <p class="text-gray-600 max-w-md mx-auto mb-8">
+        Xin lỗi, bạn không có quyền truy cập vào trang này. 
+        Vui lòng liên hệ với Quản trị viên nếu bạn nghĩ đây là một sự nhầm lẫn.
+    </p>
+
+    <div class="flex gap-4">
+        <a href="/" class="px-6 py-2 border-2 border-pink-400 text-pink-500 rounded-full font-bold hover:bg-pink-50 transition">
+            Về Trang Chủ
+        </a>
+        <a href="/login" class="px-6 py-2 bg-pink-500 text-white rounded-full font-bold hover:bg-pink-600 shadow-md transition">
+            Đăng Nhập Lại
+        </a>
+    </div>
+
+</body>
+</html>

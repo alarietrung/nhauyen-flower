@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tài Khoản Của Tôi - Nhã Uyên Flower</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>body { font-family: 'Quicksand', sans-serif; }</style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header (Copy lại hoặc dùng Fragment sau này) -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-2">
+                <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" class="h-12 w-auto">
+                <span class="font-bold text-xl text-pink-600 hidden md:block">Nhã Uyên Flower</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="/" class="text-gray-600 hover:text-pink-600 font-bold">Trang Chủ</a>
+                <form th:action="@{/logout}" method="post">
+                    <button class="bg-pink-100 text-pink-600 px-4 py-2 rounded-full font-bold hover:bg-pink-200 transition text-sm">
+                        <i class="fas fa-sign-out-alt mr-1"></i> Đăng Xuất
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-10 max-w-5xl">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Hồ Sơ Của Tôi</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Cột Trái: Thông Tin Cá Nhân -->
+            <div class="md:col-span-1">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+                    <div class="w-24 h-24 bg-pink-100 rounded-full mx-auto flex items-center justify-center text-4xl text-pink-500 mb-4">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-800" th:text="${user.fullName}">Tên Người Dùng</h2>
+                    <p class="text-gray-500 text-sm mb-6" th:text="'@' + ${user.username}">@username</p>
+
+                    <form th:action="@{/profile/update}" method="post" th:object="${user}" class="text-left space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Họ và Tên</label>
+                            <input type="text" th:field="*{fullName}" class="w-full border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-pink-500 transition">
+                        </div>
+                        <!-- Thêm các trường khác như SĐT, Email ở đây nếu có -->
+                        
+                        <button class="w-full bg-pink-500 text-white font-bold py-2 rounded-lg hover:bg-pink-600 transition shadow-md">
+                            Cập Nhật Thông Tin
+                        </button>
+                    </form>
+                    
+                    <div th:if="${param.success}" class="mt-4 text-green-600 text-sm font-bold bg-green-50 p-2 rounded border border-green-100">
+                        <i class="fas fa-check-circle mr-1"></i> Đã cập nhật thành công!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột Phải: Lịch Sử Đơn Hàng (Placeholder) -->
+            <div class="md:col-span-2">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 min-h-[400px]">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <i class="fas fa-history text-pink-500"></i> Lịch Sử Đơn Hàng
+                    </h2>
+
+                    <!-- Nếu chưa có logic lấy đơn hàng -->
+                    <div class="text-center py-10 text-gray-400">
+                        <i class="fas fa-box-open text-6xl mb-4 opacity-50"></i>
+                        <p>Tính năng xem lịch sử đơn hàng đang được cập nhật.</p>
+                        <a href="/" class="mt-4 inline-block text-pink-600 font-bold hover:underline">Đặt hàng ngay</a>
+                    </div>
+
+                    <!-- Code mẫu hiển thị đơn hàng (Sẽ mở ra khi backend sẵn sàng) -->
+                    <!-- 
+                    <div class="space-y-4">
+                        <div th:each="order : ${orders}" class="border border-gray-100 rounded-xl p-4 hover:shadow-md transition">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold text-gray-800" th:text="'Đơn hàng #' + ${order.id}">#1</span>
+                                <span class="text-sm text-gray-500" th:text="${#dates.format(order.createdAt, 'dd/MM/yyyy')}">01/01/2026</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-pink-600 font-bold" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold" th:text="${order.status}">Chờ duyệt</span>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

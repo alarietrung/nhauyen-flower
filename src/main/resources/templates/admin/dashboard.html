@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Nhã Uyên Flower</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Quicksand', sans-serif; background-color: #FFFAFA; }
+        .font-heading { font-family: 'Playfair Display', serif; }
+        .nav-link.active { background-color: #fdf2f8; color: #db2777; border-right: 4px solid #db2777; }
+        .nav-link:hover { background-color: #fdf2f8; color: #db2777; padding-left: 1.75rem; }
+        .nav-link { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-gray-100 flex flex-col shadow-sm z-10">
+        <div class="h-24 flex items-center justify-center border-b border-gray-50 p-4">
+            <a href="/" class="block hover:opacity-80 transition">
+                <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Admin Panel" 
+                     class="max-h-16 w-auto object-contain"
+                     onerror="this.onerror=null; this.src='https://placehold.co/150x50/f0f9ff/db2777?text=Admin+Panel';">
+            </a>
+        </div>
+
+        <nav class="flex-1 py-6 space-y-2">
+            <p class="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Tổng Quan</p>
+            <!-- Link Dashboard Active -->
+            <a href="/admin/dashboard" class="nav-link active block py-3 px-6 text-gray-600 font-medium flex items-center gap-3">
+                <i class="fas fa-chart-line w-5"></i> Thống Kê
+            </a>
+
+            <p class="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2">Quản Lý Cửa Hàng</p>
+            <a href="/admin/products" class="nav-link block py-3 px-6 text-gray-600 font-medium flex items-center gap-3">
+                <i class="fas fa-box-open w-5"></i> Sản Phẩm
+            </a>
+            <a href="/admin/categories" class="nav-link block py-3 px-6 text-gray-600 font-medium flex items-center gap-3">
+                <i class="fas fa-layer-group w-5"></i> Danh Mục
+            </a>
+            <a href="/admin/orders" class="nav-link block py-3 px-6 text-gray-600 font-medium flex items-center gap-3">
+                <i class="fas fa-shopping-bag w-5"></i> Đơn Hàng
+            </a>
+
+            <p class="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mt-8 mb-2">Hệ Thống</p>
+            <a href="/" class="nav-link block py-3 px-6 text-gray-600 font-medium flex items-center gap-3">
+                <i class="fas fa-home w-5"></i> Về Trang Chủ
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-50 bg-gray-50">
+            <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 overflow-hidden">
+                    <div class="w-10 h-10 rounded-full bg-pink-100 flex-shrink-0 flex items-center justify-center text-pink-500 font-bold">A</div>
+                    <div>
+                        <p class="text-sm font-bold text-gray-700 truncate">Admin</p>
+                        <p class="text-xs text-gray-500">Đang online</p>
+                    </div>
+                </div>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="text-gray-400 hover:text-red-500 transition p-2" title="Đăng xuất">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto bg-[#FFFAFA] p-8">
+        
+        <div class="mb-8">
+            <h1 class="text-3xl font-heading font-bold text-gray-800">Tổng Quan Kinh Doanh</h1>
+            <p class="text-gray-500 mt-1">Chào mừng quay trở lại, chúc anh một ngày buôn may bán đắt!</p>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            
+            <!-- Doanh Thu -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-2xl">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm font-bold uppercase">Doanh Thu</p>
+                    <p class="text-2xl font-bold text-gray-800" th:text="${#numbers.formatDecimal(totalRevenue, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</p>
+                </div>
+            </div>
+
+            <!-- Đơn Hàng -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm font-bold uppercase">Đơn Hàng</p>
+                    <p class="text-2xl font-bold text-gray-800" th:text="${orderCount}">0</p>
+                </div>
+            </div>
+
+            <!-- Sản Phẩm -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-14 h-14 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-2xl">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm font-bold uppercase">Sản Phẩm</p>
+                    <p class="text-2xl font-bold text-gray-800" th:text="${productCount}">0</p>
+                </div>
+            </div>
+
+            <!-- Danh Mục -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-2xl">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm font-bold uppercase">Danh Mục</p>
+                    <p class="text-2xl font-bold text-gray-800" th:text="${categoryCount}">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions (Optional) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-gradient-to-r from-pink-500 to-pink-400 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden group">
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold mb-2">Thêm Sản Phẩm Mới</h3>
+                    <p class="mb-6 opacity-90">Cập nhật những mẫu hoa mới nhất cho cửa hàng ngay nào.</p>
+                    <a href="/admin/products/new" class="bg-white text-pink-600 px-6 py-2 rounded-full font-bold shadow hover:bg-gray-50 transition">
+                        <i class="fas fa-plus mr-1"></i> Tạo Ngay
+                    </a>
+                </div>
+                <i class="fas fa-spa absolute -bottom-4 -right-4 text-9xl text-white opacity-20 group-hover:scale-110 transition duration-500"></i>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Lối tắt quản lý</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="/admin/orders" class="flex items-center gap-3 p-4 rounded-xl bg-gray-50 hover:bg-blue-50 hover:text-blue-600 transition border border-gray-100">
+                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-blue-500"><i class="fas fa-clipboard-list"></i></div>
+                        <span class="font-bold">Xem Đơn Hàng</span>
+                    </a>
+                    <a href="/admin/categories" class="flex items-center gap-3 p-4 rounded-xl bg-gray-50 hover:bg-purple-50 hover:text-purple-600 transition border border-gray-100">
+                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-purple-500"><i class="fas fa-tags"></i></div>
+                        <span class="font-bold">QL Danh Mục</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>

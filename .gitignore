@@ -1,0 +1,28 @@
+# Mặc định của Maven (file biên dịch)
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+*.class
+
+# File cấu hình của IDE (VS Code, IntelliJ, Eclipse)
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+bin/
+
+# File hệ thống
+.DS_Store
+Thumbs.db
+
+# Log file
+*.log
+
+# File tạm
+*.bak
+*.tmp
+*.swp

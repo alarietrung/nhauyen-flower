@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.id != null ? 'Sửa Sản Phẩm' : 'Thêm Sản Phẩm Mới'}">Form Sản Phẩm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Quicksand', sans-serif; background-color: #FFFAFA; }
+        .font-heading { font-family: 'Playfair Display', serif; }
+        .input-field:focus {
+            outline: none;
+            border-color: #f472b6;
+            box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen py-10 px-4">
+
+    <div class="bg-white p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-3xl border border-pink-50 relative overflow-hidden">
+        <!-- Decor background -->
+        <div class="absolute top-0 right-0 w-32 h-32 bg-pink-100 rounded-full mix-blend-multiply filter blur-2xl opacity-50 translate-x-10 -translate-y-10"></div>
+        <div class="absolute bottom-0 left-0 w-32 h-32 bg-blue-100 rounded-full mix-blend-multiply filter blur-2xl opacity-50 -translate-x-10 translate-y-10"></div>
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8 border-b border-gray-100 pb-4 relative z-10">
+            <div>
+                <h2 class="text-3xl font-heading font-bold text-gray-800" 
+                    th:text="${product.id != null ? 'Chỉnh Sửa Hoa' : 'Thêm Hoa Mới'}"></h2>
+                <p class="text-gray-500 text-sm mt-1">Nhập thông tin chi tiết cho bó hoa.</p>
+            </div>
+            <a href="/admin/products" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition">
+                <i class="fas fa-times"></i>
+            </a>
+        </div>
+
+        <!-- Form (ĐÃ SỬA: Dùng th:action để thêm mã bảo mật CSRF) -->
+        <form th:action="@{/admin/products/save}" method="post" enctype="multipart/form-data" th:object="${product}" class="relative z-10 space-y-6">
+            
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{image}">
+
+            <!-- Tên Hoa -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2 text-sm uppercase tracking-wide">Tên Hoa <span class="text-pink-500">*</span></label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-tag"></i></span>
+                    <input type="text" th:field="*{name}" required placeholder="Ví dụ: Bó Hoa Hồng Đỏ Lãng Mạn"
+                           class="input-field w-full border border-gray-200 pl-10 pr-4 py-3 rounded-xl bg-gray-50 transition placeholder-gray-400">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Giá -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-sm uppercase tracking-wide">Giá Tiền (VNĐ) <span class="text-pink-500">*</span></label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-money-bill-wave"></i></span>
+                        <input type="number" th:field="*{price}" required placeholder="0"
+                               class="input-field w-full border border-gray-200 pl-10 pr-4 py-3 rounded-xl bg-gray-50 transition placeholder-gray-400">
+                    </div>
+                </div>
+                <!-- Danh Mục -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-sm uppercase tracking-wide">Danh Mục</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"><i class="fas fa-list"></i></span>
+                        <select th:field="*{category}" class="input-field w-full border border-gray-200 pl-10 pr-10 py-3 rounded-xl bg-gray-50 transition appearance-none">
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                        </select>
+                        <span class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400"><i class="fas fa-chevron-down text-xs"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hình Ảnh -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2 text-sm uppercase tracking-wide">Hình Ảnh</label>
+                <div class="flex items-start gap-6 p-4 border border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-white transition">
+                    
+                    <!-- Preview ảnh cũ nếu có -->
+                    <div class="relative group" th:if="${product.image != null}">
+                        <img th:src="@{'/images/' + ${product.image}}" class="w-24 h-24 object-cover rounded-lg shadow-md">
+                        <span class="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow">Đang dùng</span>
+                    </div>
+                    <div th:unless="${product.image != null}" class="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+                        <i class="fas fa-image text-2xl"></i>
+                    </div>
+
+                    <div class="flex-1">
+                        <input type="file" name="imageFile" accept="image/*" 
+                               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-600 hover:file:bg-pink-100 transition cursor-pointer">
+                        <p class="text-xs text-gray-400 mt-2 italic">Hỗ trợ: JPG, PNG, WEBP. Nếu không chọn, sẽ giữ nguyên ảnh cũ.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mô Tả -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2 text-sm uppercase tracking-wide">Mô Tả Chi Tiết</label>
+                <textarea th:field="*{description}" rows="4" placeholder="Viết vài dòng giới thiệu về bó hoa này..."
+                          class="input-field w-full border border-gray-200 p-4 rounded-xl bg-gray-50 transition placeholder-gray-400"></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end gap-4 pt-6 mt-4 border-t border-gray-100">
+                <a href="/admin/products" class="px-6 py-3 rounded-full text-gray-600 font-bold hover:bg-gray-100 transition">Hủy Bỏ</a>
+                <button type="submit" class="px-8 py-3 bg-pink-500 text-white rounded-full font-bold shadow-lg shadow-pink-200 hover:bg-pink-600 hover:shadow-pink-300 transition transform hover:-translate-y-1 flex items-center gap-2">
+                    <i class="fas fa-save"></i> Lưu Sản Phẩm
+                </button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

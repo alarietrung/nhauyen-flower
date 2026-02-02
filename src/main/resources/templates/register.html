@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng Ký Thành Viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>body { font-family: 'Quicksand', sans-serif; }</style>
+</head>
+<body class="bg-pink-50 min-h-screen flex items-center justify-center py-10">
+
+    <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md border border-pink-100 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-300 to-pink-500"></div>
+
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Tạo Tài Khoản</h1>
+            <p class="text-gray-400 text-sm mt-1">Trở thành thành viên của Nhã Uyên Flower</p>
+        </div>
+
+        <div th:if="${error}" class="bg-red-100 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm mb-4">
+            <i class="fas fa-exclamation-circle mr-1"></i> <span th:text="${error}"></span>
+        </div>
+
+        <form th:action="@{/register}" method="post" th:object="${user}" class="space-y-4">
+            
+            <div class="text-left">
+                <label class="text-xs font-bold text-gray-500 ml-1">Họ và Tên</label>
+                <input type="text" th:field="*{fullName}" required placeholder="Ví dụ: Nguyễn Văn A"
+                       class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500 transition">
+            </div>
+
+            <!-- Thêm ô nhập Email vào Form Đăng Ký -->
+            <div class="text-left">
+                <label class="text-xs font-bold text-gray-500 ml-1">Email</label>
+                <input type="email" th:field="*{email}" required placeholder="email@example.com"
+                       class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500 transition">
+            </div>
+
+            <div class="text-left">
+                <label class="text-xs font-bold text-gray-500 ml-1">Tên đăng nhập</label>
+                <input type="text" th:field="*{username}" required placeholder="Viết liền không dấu (vd: trunghoa)"
+                       class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500 transition">
+            </div>
+
+            <div class="text-left">
+                <label class="text-xs font-bold text-gray-500 ml-1">Mật khẩu</label>
+                <input type="password" th:field="*{password}" required placeholder="******"
+                       class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500 transition">
+            </div>
+
+            <div class="text-left">
+                <label class="text-xs font-bold text-gray-500 ml-1">Nhập lại mật khẩu</label>
+                <input type="password" name="confirmPassword" required placeholder="******"
+                       class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500 transition">
+            </div>
+
+            <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-pink-200 transition transform hover:-translate-y-1 mt-4">
+                Đăng Ký Ngay
+            </button>
+        </form>
+
+        <div class="mt-6 pt-6 border-t border-gray-50">
+            <p class="text-sm text-gray-500">Đã có tài khoản? 
+                <a href="/login" class="text-pink-600 font-bold hover:underline">Đăng nhập</a>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

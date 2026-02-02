@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhã Uyên Flower - Hoa Tươi Trảng Bom</title>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <!-- CSS Riêng -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
+            <!-- Logo -->
+            <a href="/" class="flex items-center flex-shrink-0 order-1">
+                <img th:src="@{/images/logo.png}" src="/images/logo.png" alt="Logo" class="logo-img" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/180x60/f0f9ff/db2777?text=Nhã+Uyên';">
+            </a>
+
+            <!-- Search -->
+            <div class="order-3 md:order-2 w-full md:w-auto md:flex-grow max-w-md mx-auto md:mx-4 mt-2 md:mt-0">
+                <form action="/search" method="get" class="relative search-container">
+                    <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm hoa..." class="search-input w-full px-4 py-2 text-sm">
+                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+
+            <!-- Menu Desktop -->
+            <nav class="hidden md:flex space-x-6 items-center order-2 md:order-3">
+                <a href="/"><i class="fas fa-home"></i> Trang Chủ</a>
+                
+                <div class="dropdown group">
+                    <button class="flex items-center gap-1 py-4 hover:text-pink-500">
+                        <i class="fas fa-layer-group"></i> Danh Mục <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a th:each="cat : ${categories}" th:href="@{/category/{id}(id=${cat.id})}" th:text="${cat.name}">Category</a>
+                        <a th:if="${categories == null || categories.isEmpty()}" href="#">Đang cập nhật...</a>
+                    </div>
+                </div>
+
+                <a href="/cart" class="hover:text-pink-500"><i class="fas fa-shopping-cart"></i> Giỏ Hàng</a>
+
+                <!-- Logic Hiển thị Tài khoản / Đăng nhập -->
+                <div sec:authorize="!isAuthenticated()">
+                    <a href="/login" class="hover:text-pink-500 font-bold"><i class="fas fa-user"></i> Đăng Nhập</a>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+                    <a href="/profile" class="text-pink-600 font-bold bg-pink-50 px-3 py-1 rounded-full border border-pink-100 hover:bg-pink-100 flex items-center gap-2">
+                        <i class="fas fa-user-circle"></i> <span sec:authentication="name">User</span>
+                    </a>
+                </div>
+            </nav>
+
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 text-2xl order-2"><i class="fas fa-bars"></i></button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+             <a href="/" class="block px-6 py-3 text-gray-700 hover:bg-pink-50">Trang Chủ</a>
+             <div>
+                  <button id="mobile-categories-button" class="w-full text-left px-6 py-3 text-gray-700 hover:bg-pink-50 flex justify-between">
+                      <span>Danh Mục</span> <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div id="mobile-categories-dropdown" class="hidden bg-gray-50">
+                      <a th:each="cat : ${categories}" th:href="@{/category/{id}(id=${cat.id})}" class="block px-10 py-2 text-sm text-gray-600" th:text="${cat.name}">Category</a>
+                  </div>
+             </div>
+             <a href="/cart" class="block px-6 py-3 text-gray-700 hover:bg-pink-50">Giỏ Hàng</a>
+             
+             <div sec:authorize="!isAuthenticated()">
+                 <a href="/login" class="block px-6 py-3 text-gray-700 hover:bg-pink-50 font-bold">Đăng Nhập</a>
+             </div>
+             <div sec:authorize="isAuthenticated()">
+                 <a href="/profile" class="block px-6 py-3 text-pink-600 font-bold hover:bg-pink-50">Tài khoản: <span sec:authentication="name"></span></a>
+             </div>
+        </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="flex-grow">
+        <!-- Banner -->
+        <section class="hero-banner">
+            <div class="hero-content">
+                <h1 class="font-heading">Nhã Uyên Flower</h1>
+                <p>Trao gửi yêu thương - Hoa tươi chất lượng tại Trảng Bom</p>
+                <a href="#featured" class="btn-primary mt-6">Khám Phá Ngay <i class="fas fa-arrow-down ml-2"></i></a>
+            </div>
+        </section>
+
+        <!-- Products -->
+        <section id="featured" class="py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="section-title">
+                    <span th:if="${keyword != null}" th:text="'Kết quả tìm kiếm: ' + ${keyword}"></span>
+                    <span th:unless="${keyword != null}">Sản Phẩm Nổi Bật</span>
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <div class="product-card group" th:each="product : ${products}">
+                        <div class="image-container">
+                            <a th:href="@{/product/{id}(id=${product.id})}">
+                                <img th:src="${product.image != null && product.image != '' ? '/images/' + product.image : 'https://placehold.co/400x500/f0f9ff/db2777?text=Hoa'}" 
+                                     alt="Hoa" onerror="this.src='https://placehold.co/400x500/f0f9ff/333333?text=Error'">
+                            </a>
+                            <div class="overlay-actions">
+                                <a th:href="@{/product/{id}(id=${product.id})}" class="btn-quick-view"><i class="fas fa-eye"></i> Xem</a>
+                            </div>
+                        </div>
+                        <div class="details">
+                            <div>
+                                <span class="text-xs text-pink-500 font-bold uppercase" th:text="${product.category != null ? product.category.name : 'Hoa Tươi'}">Category</span>
+                                <a th:href="@{/product/{id}(id=${product.id})}">
+                                    <h3 class="font-bold text-gray-800 hover:text-pink-600 transition truncate" th:text="${product.name}">Tên Hoa</h3>
+                                </a>
+                                <p class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</p>
+                            </div>
+                            <a th:href="@{/cart/add/{id}(id=${product.id})}" class="btn-primary btn-add-cart text-sm">Thêm vào giỏ</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div th:if="${totalPages > 1}" class="flex justify-center mt-12 gap-2">
+                    <a th:if="${currentPage > 0}" th:href="@{/(page=${currentPage - 1})}" class="pagination-link"><i class="fas fa-chevron-left"></i></a>
+                    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{/(page=${i})}" th:text="${i + 1}" th:class="${currentPage == i ? 'pagination-link active' : 'pagination-link'}">1</a>
+                    </span>
+                    <a th:if="${currentPage < totalPages - 1}" th:href="@{/(page=${currentPage + 1})}" class="pagination-link"><i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center mb-6 footer-socials">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <p>&copy; <span id="current-year"></span> Nhã Uyên Flower. Thiết kế bởi Anh Trung & Mỹ Kim.</p>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>

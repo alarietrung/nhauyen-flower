@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product != null ? product.name : 'Chi tiết sản phẩm'}">Chi tiết sản phẩm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Quicksand', sans-serif; background-color: #FFFAFA; }
+        .font-heading { font-family: 'Playfair Display', serif; }
+        .btn-primary { background-color: #f472b6; color: white; border-radius: 999px; transition: 0.3s; }
+        .btn-primary:hover { background-color: #ec4899; transform: translateY(-2px); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header đơn giản -->
+    <header class="bg-white shadow-sm py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-heading font-bold text-pink-600 hover:text-pink-700 transition">
+                <i class="fas fa-arrow-left mr-2"></i> Quay lại trang chủ
+            </a>
+            <a href="/cart" class="text-gray-600 hover:text-pink-600 transition font-medium">
+                <i class="fas fa-shopping-cart mr-1"></i> Giỏ hàng
+            </a>
+        </div>
+    </header>
+
+    <!-- Nội dung chính -->
+    <main class="container mx-auto px-4 py-12" th:if="${product != null}">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                
+                <!-- Cột Ảnh (Trái) -->
+                <div class="bg-gray-100 p-8 flex items-center justify-center">
+                    <img th:src="${product.image != null ? '/images/' + product.image : 'https://placehold.co/600x600/fdf2f8/db2777?text=Nhã+Uyên+Flower'}" 
+                         alt="Product Image" 
+                         class="w-full h-auto object-cover rounded-lg shadow-lg max-h-[500px]">
+                </div>
+
+                <!-- Cột Thông tin (Phải) -->
+                <div class="p-8 md:p-12 flex flex-col justify-center">
+                    <span class="text-pink-500 font-bold uppercase tracking-wider text-sm mb-2" 
+                          th:text="${product.category != null ? product.category.name : 'Sản phẩm nổi bật'}">Danh Mục</span>
+                    
+                    <h1 class="text-4xl font-heading font-bold text-gray-900 mb-4" th:text="${product.name}">Tên Sản Phẩm</h1>
+                    
+                    <p class="text-3xl font-bold text-pink-600 mb-6" 
+                       th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                       0 đ
+                    </p>
+
+                    <div class="prose text-gray-600 mb-8 leading-relaxed">
+                        <p th:text="${product.description}">Mô tả sản phẩm sẽ hiện ở đây...</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <!-- NÚT MUA NGAY (Đã cập nhật) -->
+                        <a th:href="@{/cart/add/{id}(id=${product.id})}" class="btn-primary py-3 px-8 text-lg font-bold shadow-lg shadow-pink-200 cursor-pointer text-center">
+                            <i class="fas fa-shopping-bag mr-2"></i> Đặt Mua Ngay
+                        </a>
+                        
+                        <button class="border-2 border-pink-400 text-pink-600 py-3 px-8 rounded-full font-bold hover:bg-pink-50 transition">
+                            <i class="fas fa-phone-alt mr-2"></i> Gọi Tư Vấn
+                        </button>
+                    </div>
+                    
+                    <p class="mt-6 text-sm text-gray-400 italic">
+                        * Cam kết hoa tươi trong ngày. Giao hàng nhanh tại Trảng Bom.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Thông báo nếu không tìm thấy sản phẩm -->
+    <div class="text-center py-20" th:unless="${product != null}">
+        <h2 class="text-2xl font-bold text-gray-500">Opps! Không tìm thấy sản phẩm này.</h2>
+        <a href="/" class="text-pink-600 mt-4 inline-block hover:underline">Về trang chủ</a>
+    </div>
+
+</body>
+</html>

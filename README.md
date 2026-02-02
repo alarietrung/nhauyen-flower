@@ -102,4 +102,5 @@ src/main/resources
 │   ├── error       # Các trang lỗi (404, 403, 500)
 │   └── ...         # Các trang người dùng (index, cart, login...)
 └── application.properties
-👨‍💻 Tác GiảDự án được thực hiện bởi Trung Lọ 30 Ngày Liên Tục 1.0.0 - 2026
+👨‍💻 Tác Giả
+Dự án được thực hiện bởi Trung Lọ 30 Ngày Liên Tục 1.0.0 - 2026
